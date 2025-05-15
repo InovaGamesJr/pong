@@ -10,7 +10,6 @@ load("res://Resource/Curve2D/PATH4.tres"),
 load("res://Resource/Curve2D/PATH5.tres")
 ]
 
-
 func RandomPath() -> void:
 	curve = PATHS.pick_random()
 	if curve in [PATHS[4], PATHS[3], PATHS[0]]:

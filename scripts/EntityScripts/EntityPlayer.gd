@@ -14,11 +14,11 @@ class_name EntityPlayer
 @export var pathfollow : PathFollow2D
 @export var path : Path2D
 @export var pointlight : PointLight2D
-
+@export var IMASPRITE : Sprite2D
 
 #Variaveis 
 var habilidadeAtiva : bool = false
-var nomeBandeira : String = "Brasil"
+var nomeBandeira : String = "HongKong"
 var velocidade : int = 300
 
 #Booleanos
@@ -59,7 +59,7 @@ func MatchBandeiras(delta) -> void:
 	match nomeBandeira:#Não comparar objetos, e sim nomes e IDs
 		"Alemanha":
 			cooldown.start()
-			habilidades.bola_energia(BALL, CPU, self)
+			habilidades.BOLA_ENERGIA(BALL, CPU, self)
 		"Austria":
 			pass
 		"Brasil":
@@ -73,7 +73,7 @@ func MatchBandeiras(delta) -> void:
 			habilidadeAtiva = false
 		"HongKong":
 			cooldown.start()
-			habilidades.ROTA(BALL, pathfollow, delta, path, self)
+			habilidades.PATHMAKER($"../HABILIDADES/PATHMAKERLINE", self)
 		"Japao":
 			pass
 		"Portugal":

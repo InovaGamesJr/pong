@@ -15,7 +15,7 @@ const aceleracao : int = 35
 
 var ballVelocity : int 
 var ballDirection : Vector2 = Vector2(1,0).normalized()
-var ballCollision
+var ballCollision : KinematicCollision2D
 var real : bool = true
 
 

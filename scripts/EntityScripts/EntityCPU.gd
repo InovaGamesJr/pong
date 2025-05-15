@@ -31,8 +31,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	global_position.x = clampi(global_position.x, 1178, 1178)
-	global_position.y = clampi(global_position.y, 100, 612)
+	global_position.x = clampi(global_position.x, 1178.0, 1178.0)
+	global_position.y = clampi(global_position.y, 100.0, 612.0)
 	
 	direction = sign(Ball.global_position.y - self.global_position.y)
 
@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 	if habilidadeAtiva: 
 		MatchBandeiras()
 		
-	velocity.y = clampi(velocity.y, -300, 300)
+	velocity.y = clampi(velocity.y, -300.0, 300.0)
 	move_and_slide()
 
 func MatchBandeiras() -> void:

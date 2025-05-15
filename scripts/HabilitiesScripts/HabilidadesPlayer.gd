@@ -1,7 +1,10 @@
 extends Node
 class_name HabilidadesPlayer
 
+#Preloads
 var Cena = preload("res://scenes/EntityScenes/bolinha.tscn")
+
+#Boleanos
 var colidiu : bool = false
 var energia : bool = false
 var iniciado : bool = false
@@ -25,7 +28,7 @@ func DASH(Player : EntityPlayer):#HABILIADE TERMINADA E TESTADA
 		
 		Player.HabilidadeAtiva = false
 
-func CLARAO(POINTLIGHT : PointLight2D, PLAYER : EntityPlayer) -> void:
+func CLARAO(POINTLIGHT : PointLight2D, PLAYER : EntityPlayer) -> void:#Em testes
 	var tween = PLAYER.create_tween()
 	tween.tween_property(POINTLIGHT, "energy", 30.0, 0.4)
 	await PLAYER.get_tree().create_timer(2.5).timeout
@@ -46,7 +49,7 @@ func CONGELAR(CPU: EntityCPU, Sound : Sounds) -> void:#Terminado e testado
 	DescongeladoTween.tween_property(CPU.SpriteCongelado, "modulate", Color.TRANSPARENT, 0.6)
 	CPU.congelado = false
 
-func CLONE(Ball : EntityBall) -> void:
+func CLONE(Ball : EntityBall) -> void:#Dificuldades em fazer
 	
 	Ball.visible = false
 	
@@ -95,7 +98,7 @@ func IMPULSO(Ball : EntityBall, Player : EntityPlayer, CPU : EntityCPU) -> void:
 			Ball.ballVelocity -= 150
 			colidiu = false
 
-func bola_energia(Ball: EntityBall, CPU : EntityCPU, PLAYER : EntityPlayer) -> void:#Precisa de animação e melhoria
+func BOLA_ENERGIA(Ball: EntityBall, CPU : EntityCPU, PLAYER : EntityPlayer) -> void:#Precisa de animação e melhoria
 	if not energia:
 		Ball.ballVelocity += 150
 		energia = true
@@ -114,19 +117,50 @@ func bola_energia(Ball: EntityBall, CPU : EntityCPU, PLAYER : EntityPlayer) -> v
 			CPU.velocidade = 300
 			PLAYER.habilidadeAtiva = false
 
-func PATHMAKER(Ball : EntityBall):
-	pass
+func PATHMAKER(LINE : Line2D, PLAYER : EntityPlayer):
+	Engine.time_scale = 0.22
+	if Input.is_action_pressed("MOUSEPRESSED"):
+		var pos = PLAYER.get_global_mouse_position()
+		LINE.add_point(pos)
+	
+	
 
-func ROTA(Ball : EntityBall, pathFollow : PathFollow2D, delta, PATH : Path2D, PLAYER : EntityPlayer):
+func ROTA(Ball : EntityBall, pathFollow : PathFollow2D, delta, PATH : Path2D, PLAYER : EntityPlayer):#TERMINADO E TESTADO
+	#Randomiza apenas uma vez, booleano para não executar mais de uma vez
 	if not iniciado:
 		PATH.RandomPath()
 		iniciado = true
 	
-	if pathFollow.progress_ratio < 1.0:
-		pathFollow.progress += (Ball.ballVelocity - 100) * delta
-		Ball.global_position = pathFollow.global_position
 	
+	if pathFollow.progress_ratio < 1.0:
+		pathFollow.progress += (Ball.ballVelocity - 200) * delta
+		Ball.global_position = pathFollow.global_position#Vai seguir a posição do PathFollow
+
+		#Caso o caminho termine, ele normaliza para que a bola siga a trajetoria do final do PATH
 	if pathFollow.progress_ratio == 1.0:
 		Ball.ballDirection = pathFollow.position.normalized()
+		pathFollow.progress_ratio = 0.0
+		iniciado = false
 		PLAYER.habilidadeAtiva = false
 	
+func GRAVIDADE(IMA : Sprite2D, BALL : EntityBall, PLAYER : EntityPlayer):#TERMINADA E TESTADA
+	var NewDir : Vector2 
+	var direction = BALL.global_position.distance_to(IMA.global_position)
+	
+	if BALL.global_position.y > 356.0:
+		IMA.global_position  = Vector2(1230, 618)
+		IMA.rotation = -1.0472
+		NewDir = (IMA.global_position - BALL.global_position).normalized()
+		IMA.visible = true
+		BALL.ballDirection = NewDir
+		if direction < 150:
+			PLAYER.habilidadeAtiva = false
+			
+	if BALL.global_position.y < 356.0:
+		IMA.global_position = Vector2(1230, 68)
+		IMA.rotation = -2.0944
+		NewDir = (IMA.global_position - BALL.global_position).normalized()
+		IMA.visible = true
+		BALL.ballDirection = NewDir
+		if direction < 150:
+			PLAYER.habilidadeAtiva = false

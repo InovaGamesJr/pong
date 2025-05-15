@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cysh5bxxu7ogh"]
+[gd_scene load_steps=17 format=3 uid="uid://cysh5bxxu7ogh"]
 
 [ext_resource type="Texture2D" uid="uid://0xs1mafiwvoe" path="res://Assets/Background/Background_normal.png" id="1_074by"]
 [ext_resource type="Theme" uid="uid://cs685o7rnu2r0" path="res://Resource/Themes/LabelPointTheme.tres" id="1_qgkkw"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bmpxgop3elb7f" path="res://scenes/audiosScript.gd" id="8_gl4v5"]
 [ext_resource type="Script" uid="uid://g47m705s8353" path="res://scripts/preloads/preloadPATHINGS.gd" id="9_xxkq3"]
 [ext_resource type="Texture2D" uid="uid://btib0bet15w3k" path="res://Assets/Assets/Bolinha.png" id="10_igcbh"]
+[ext_resource type="Texture2D" uid="uid://dmuou6cydn00l" path="res://Assets/Habilidades/GRAVIDADE.png" id="11_xxkq3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mx5x"]
 size = Vector2(21.0019, 1055.96)
@@ -99,14 +100,15 @@ Ball = NodePath("../BolaBody")
 Sound = NodePath("../AUDIOS")
 PLAYER = NodePath("../Playerbody")
 
-[node name="Playerbody" parent="." node_paths=PackedStringArray("CPU", "BALL", "Sound", "pathfollow", "path", "pointlight") instance=ExtResource("1_tud0r")]
+[node name="Playerbody" parent="." node_paths=PackedStringArray("CPU", "BALL", "Sound", "pathfollow", "path", "pointlight", "IMASPRITE") instance=ExtResource("1_tud0r")]
 position = Vector2(96.34, 304.214)
 CPU = NodePath("../CPUBody")
 BALL = NodePath("../BolaBody")
 Sound = NodePath("../AUDIOS")
-pathfollow = NodePath("../Path2D/PathFollow2D")
-path = NodePath("../Path2D")
-pointlight = NodePath("../PointLight2D")
+pathfollow = NodePath("../HABILIDADES/ROTA/ROTAFOLLOW")
+path = NodePath("../HABILIDADES/ROTA")
+pointlight = NodePath("../HABILIDADES/FLASH")
+IMASPRITE = NodePath("../HABILIDADES/IMASPRITE")
 
 [node name="CameraMesa" type="Camera2D" parent="."]
 position = Vector2(604.486, 324.015)
@@ -140,24 +142,35 @@ Freeze = NodePath("Freeze")
 [node name="Freeze" type="AudioStreamPlayer" parent="AUDIOS"]
 volume_db = -20.0
 
-[node name="Path2D" type="Path2D" parent="."]
-position = Vector2(340.024, 359.117)
-scale = Vector2(0.68387, 0.980502)
+[node name="HABILIDADES" type="Node" parent="."]
+
+[node name="ROTA" type="Path2D" parent="HABILIDADES"]
+position = Vector2(360, 399.001)
+scale = Vector2(0.724047, 1.0894)
 script = ExtResource("9_xxkq3")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+[node name="ROTAFOLLOW" type="PathFollow2D" parent="HABILIDADES/ROTA"]
 position = Vector2(403.288, -141.363)
 rotation = -0.237076
 loop = false
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
+[node name="FLASH" type="PointLight2D" parent="HABILIDADES"]
 visible = false
-position = Vector2(1060.68, 317.715)
-scale = Vector2(2.96515, 5.8248)
+position = Vector2(1122.99, 353)
+scale = Vector2(3.13935, 6.4717)
 energy = 0.0
 shadow_enabled = true
 texture = ExtResource("10_igcbh")
 texture_scale = 1.48
+
+[node name="IMASPRITE" type="Sprite2D" parent="HABILIDADES"]
+visible = false
+position = Vector2(1241, 616)
+rotation = -1.0472
+scale = Vector2(0.277778, 0.277778)
+texture = ExtResource("11_xxkq3")
+
+[node name="PATHMAKERLINE" type="Line2D" parent="HABILIDADES"]
 
 [connection signal="body_entered" from="Areas/AreaDireita" to="LabelsPontuação" method="_on_area_direita_body_entered"]
 [connection signal="body_entered" from="Areas/AreaEsquerda" to="LabelsPontuação" method="_on_area_esquerda_body_entered"]
